@@ -6,7 +6,7 @@
  * Time: 下午2:37
  */
 
-namespace Kuailian\TokenManager;
+namespace Kuaila\TokenManager;
 
 
 class TokenManager
