@@ -1,0 +1,21 @@
+{
+  "name": "kuaila/logistics",
+  "description": "Hello, Composer!",
+  "type": "library",
+  "require": {
+    "php": ">=5.6"
+  },
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Kuaila\\": "src/"
+    }
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}
