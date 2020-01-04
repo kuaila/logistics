@@ -11,7 +11,7 @@
     "psr-4": {
       "Kuaila\\": "src/"
     },
-    "files": ["config.php"]
+    "files": ["src/config.php"]
   },
   "repositories": {
     "packagist": {
