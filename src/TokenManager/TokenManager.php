@@ -11,22 +11,34 @@ namespace Kuaila\TokenManager;
 
 class TokenManager
 {
-    private $codeUrl = '';
-    private $tokenUrl = '';
-    private $refreshUrl = '';
+    private $codeUrl = 'https://openapi-release.chukou1.cn/oauth2/authorization';
+    private $tokenUrl = 'https://openapi-release.chukou1.cn/oauth2/token';
+    private $refreshUrl = 'https://openapi-release.chukou1.cn';
 
-    public function getCodeUrl()
+    private $token = '';
+
+    public function sendRequest()
+    {}
+
+    public function createToken()
+    {}
+
+    public function saveToken($token)
     {
-        $this->codeUrl = $config['codeUrl'];
+        file_put_contents('', serialize($token));
     }
 
-    public function getTokenUrl()
+    public function getToken()
     {
-        $this->tokenUrl = $config['tokenUrl'];
+        $this->token = unserialize(file_get_contents(''));
     }
 
-    public function getRefreshUrl()
-    {
-         $this->refreshUrl = $config['refreshUrl'];
-    }
+    public function checkAccountToken()
+    {}
+
+    public function refreshToken()
+    {}
+
+    public function checkRefreshToken()
+    {}
 }
