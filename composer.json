@@ -10,7 +10,8 @@
   "autoload": {
     "psr-4": {
       "Kuaila\\": "src/"
-    }
+    },
+    "files": ["src/helpers.php"]
   },
   "repositories": {
     "packagist": {
