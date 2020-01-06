@@ -16,21 +16,14 @@ class TokenManager
      *
      * @var string
      */
-    private $codeUrl = 'https://openapi-release.chukou1.cn/oauth2/authorization';
+    private $codeUrl = 'https://openapi.chukou1.cn/oauth2/authorization';
 
     /**
      * 获取令牌url
      *
      * @var string
      */
-    private $tokenUrl = 'https://openapi-release.chukou1.cn/oauth2/token';
-
-    /**
-     * 刷新令牌url
-     *
-     * @var string
-     */
-    private $refreshUrl = 'https://openapi-release.chukou1.cn';
+    private $tokenUrl = 'https://openapi.chukou1.cn/oauth2/token';
 
     /**
      * token信息
