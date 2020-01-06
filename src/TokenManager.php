@@ -6,7 +6,7 @@
  * Time: 下午2:37
  */
 
-namespace Kuaila\TokenManager;
+namespace Kuaila;
 
 
 class TokenManager
@@ -30,7 +30,7 @@ class TokenManager
      *
      * @var string
      */
-    private $token = '';
+    private $token = [];
 
     /**
      * 请求参数
@@ -94,7 +94,7 @@ class TokenManager
         $this->token = unserialize(file_get_contents(dirname(__DIR__) . '/' . 'token.log'));
     }
 
-    public function checkAccountToken()
+    public function checkToken()
     {}
 
     public function refreshToken()

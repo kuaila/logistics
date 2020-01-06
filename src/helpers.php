@@ -6,7 +6,7 @@
  * Time: 下午2:42
  */
 
-function curl($url, $post_data)
+function curl($url, $post_data, $header = [])
 {
     //初始化
     $curl = curl_init();
