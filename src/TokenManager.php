@@ -60,11 +60,21 @@ class TokenManager
         $this->params = $params;
     }
 
+    /**
+     * 获取请求参数
+     *
+     * @param $key
+     *
+     * @return mixed
+     */
     public function getParam($key)
     {
         return $this->params[$key];
     }
 
+    /**
+     * 发起授权请求
+     */
     public function sendRequest()
     {
         $url = $this->codeUrl . '?client_id=' . $this->getParam('client_id') . '&response_type=code&scope=OpenApi&redirect_uri=' . $this->getParam('redirect_uri');
@@ -72,6 +82,13 @@ class TokenManager
         header('Location:' . $url);
     }
 
+    /**
+     * 生成token
+     *
+     * @param $code
+     *
+     * @return bool|int
+     */
     public function generateToken($code)
     {
         $data = [
@@ -94,16 +111,31 @@ class TokenManager
         return $this->save(json_decode($token, true));
     }
 
+    /**
+     * 保存token
+     *
+     * @param $token
+     *
+     * @return bool|int
+     */
     public function save($token)
     {
         return file_put_contents($this->tokenlog, serialize($token));
     }
 
+    /**
+     * 获取token
+     */
     public function getToken()
     {
         $this->token = unserialize(file_get_contents($this->tokenlog));
     }
 
+    /**
+     * 获取访问令牌
+     *
+     * @return mixed
+     */
     public function getAccessToken()
     {
         $this->getToken();
@@ -115,6 +147,11 @@ class TokenManager
         return $this->token['AccessToken'];
     }
 
+    /**
+     * 检查访问令牌是否有效
+     *
+     * @return bool
+     */
     public function checkToken()
     {
         if (file_exists($this->tokenlog)) {
@@ -126,16 +163,30 @@ class TokenManager
         return false;
     }
 
+    /**
+     * 刷新token
+     */
     public function refreshToken()
     {
-        if ($this->token['RefreshTokenExpiresIn'] > time()) {
-            //TODO refresh
+        if ((filemtime($this->tokenlog) + $this->token['RefreshTokenExpiresIn']) > time()) {
+            $data = [
+                'client_id' => $this->getParam('client_id'),
+                'client_secret' => $this->getParam('client_secret'),
+                'redirect_uri' => $this->getParam('redirect_uri'),
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $this->token['RefreshToken']
+            ];
+
+            $url = $this->tokenUrl . '?client_id=' . $this->getParam('client_id') . '&client_secret=' . $this->getParam('client_secret')
+                . '&redirect_uri=' . $this->getParam('redirect_uri') . '&grant_type=refresh_token&refresh_token=' . $token['RefreshToken	'];
+
+            $result = \curl_post($url, $data);
+
+            $this->save(json_decode($result));
+
+            $this->token = $result;
         } else {
             $this->sendRequest();
         }
     }
-
-    public function checkRefreshToken()
-    {}
-
 }

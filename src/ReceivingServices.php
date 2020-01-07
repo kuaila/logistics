@@ -11,7 +11,8 @@ namespace Kuaila;
 
 class ReceivingServices
 {
-    private $url = 'https://openapi.chukou1.cn/v1/pickupAreas';
+    private $areasUrl = 'https://openapi.chukou1.cn/v1/pickupAreas';
+    private $orderUrl = 'https://openapi.chukou1.cn/v1/pickupOrders';
     private $header = [];
     private $tokenManager = null;
 
@@ -25,11 +26,32 @@ class ReceivingServices
         ];
     }
 
+    /**
+     * 获取收货区域
+     *
+     * @param $city
+     *
+     * @return array|bool|mixed|string
+     */
     public function getReceivingArea($city)
     {
-        $url = $this->url . '?City=' . $city;
+        $url = $this->areasUrl . '?City=' . $city;
 
         $result = \curl_get($url, $this->header);
+
+        return $result;
+    }
+
+    /**
+     * 创建收货订单
+     *
+     * @param $data
+     *
+     * @return array|bool|mixed|string
+     */
+    public function createReceivingOrder($data)
+    {
+        $result = \curl_post($this->orderUrl, $data, $this->header);
 
         return $result;
     }
