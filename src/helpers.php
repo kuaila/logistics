@@ -27,6 +27,11 @@ function curl_post($url, $post_data, $header = [])
     try {
         //执行命令
         $data = curl_exec($curl);
+
+        if (curl_getinfo($curl, CURLINFO_HTTP_CODE) == '200') {
+            $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE); //获取header长度
+            $data   = substr($data, $headerSize); //截取掉header
+        }
     } catch (\Exception $e) {
         return ['status' => '0', 'msg' => $e->getMessage()];
     }
@@ -55,6 +60,11 @@ function curl_get($url, $header = [])
     try {
         //执行命令
         $data = curl_exec($curl);
+
+        if (curl_getinfo($curl, CURLINFO_HTTP_CODE) == '200') {
+            $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE); //获取header长度
+            $data   = substr($data, $headerSize); //截取掉header
+        }
     } catch (\Exception $e) {
         return ['status' => '0', 'msg' => $e->getMessage()];
     }
