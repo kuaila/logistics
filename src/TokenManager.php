@@ -43,6 +43,13 @@ class TokenManager
      */
     private $params = [];
 
+    private $tokenlog = '';
+
+    public function __construct()
+    {
+        $this->tokenlog = dirname(__DIR__) . '/' . 'token.log';
+    }
+
     /**
      * 设置请求参数
      *
@@ -79,44 +86,54 @@ class TokenManager
             . '&redirect_uri=' . $this->getParam('redirect_uri') . '&grant_type=authorization_code&code=' . $code;
 
         $token = \curl_post($url, $data);
-echo '<pre>';print_r($token);
+
         if (isset($token['status']) && 0 === $token['status']) {
             return $token['msg'];
         }
 
-        return $this->save($token);
+        return $this->save(json_decode($token, true));
     }
 
     public function save($token)
     {
-        return file_put_contents(dirname(__DIR__) . '/' . 'token.log', serialize($token));
+        return file_put_contents($this->tokenlog, serialize($token));
     }
 
     public function getToken()
     {
-        $this->token = unserialize(file_get_contents(dirname(__DIR__) . '/' . 'token.log'));
+        $this->token = unserialize(file_get_contents($this->tokenlog));
     }
 
     public function getAccessToken()
     {
-        if ($this->checkToken()) {
-            return $this->token['AccessToken'];
+        $this->getToken();
+
+        if (!$this->checkToken()) {
+            $this->refreshToken();
         }
 
-        return '';
+        return $this->token['AccessToken'];
     }
 
     public function checkToken()
     {
-        if (!empty($this->token) && $this->token['AccessTokenExpiresIn'] > time()) {
-            return true;
+        if (file_exists($this->tokenlog)) {
+            if (!empty($this->token) && (filemtime($this->tokenlog) + $this->token['AccessTokenExpiresIn']) > time()) {
+                return true;
+            }
         }
 
         return false;
     }
 
     public function refreshToken()
-    {}
+    {
+        if ($this->token['RefreshTokenExpiresIn'] > time()) {
+            //TODO refresh
+        } else {
+            $this->sendRequest();
+        }
+    }
 
     public function checkRefreshToken()
     {}

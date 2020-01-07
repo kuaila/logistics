@@ -6,10 +6,8 @@
  * Time: 下午9:11
  */
 
-namespace Kuailian;
+namespace Kuaila;
 
-
-use Kuaila\TokenManager;
 
 class ReceivingServices
 {
@@ -33,6 +31,6 @@ class ReceivingServices
 
         $result = \curl_get($url, $this->header);
 
-         return $result;
+        return $result;
     }
 }
