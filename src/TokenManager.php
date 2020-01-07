@@ -75,8 +75,11 @@ class TokenManager
             'code' => $code
         ];
 
-        $token = \curl($this->tokenUrl, $data);
+        $url = $this->tokenUrl . '?client_id=' . $this->getParam('client_id') . '&client_secret=' . $this->getParam('client_secret')
+            . '&redirect_uri=' . $this->getParam('redirect_uri') . '&grant_type=authorization_code&code=' . $code;
 
+        $token = \curl_post($url, $data);
+echo '<pre>';print_r($token);
         if (isset($token['status']) && 0 === $token['status']) {
             return $token['msg'];
         }
@@ -94,8 +97,23 @@ class TokenManager
         $this->token = unserialize(file_get_contents(dirname(__DIR__) . '/' . 'token.log'));
     }
 
+    public function getAccessToken()
+    {
+        if ($this->checkToken()) {
+            return $this->token['AccessToken'];
+        }
+
+        return '';
+    }
+
     public function checkToken()
-    {}
+    {
+        if (!empty($this->token) && $this->token['AccessTokenExpiresIn'] > time()) {
+            return true;
+        }
+
+        return false;
+    }
 
     public function refreshToken()
     {}
