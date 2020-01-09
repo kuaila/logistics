@@ -108,7 +108,11 @@ class TokenManager
             return $token['msg'];
         }
 
-        return $this->save(json_decode($token, true));
+        if ($this->save(json_decode($token, true))) {
+            echo 'token生成成功 重新发起业务请求';
+        } else {
+            echo 'token生成失败';
+        }
     }
 
     /**
@@ -141,7 +145,11 @@ class TokenManager
         $this->getToken();
 
         if (!$this->checkToken()) {
-            $this->refreshToken();
+            $res = $this->refreshToken();
+
+            if ($res['status'] != 1) {
+                throw new \Exception($res['msg']);
+            }
         }
 
         return $this->token['AccessToken'];
@@ -185,8 +193,10 @@ class TokenManager
             $this->save(json_decode($result));
 
             $this->token = $result;
+
+            return ['status' => 1];
         } else {
-            $this->sendRequest();
+            return ['status' => 0, 'msg' => 'token不存在, 应用重新授权'];
         }
     }
 }

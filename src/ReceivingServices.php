@@ -11,19 +11,38 @@ namespace Kuaila;
 
 class ReceivingServices
 {
+    /**
+     * 获取收货区域
+     *
+     * @var string
+     */
     private $areasUrl = 'https://openapi.chukou1.cn/v1/pickupAreas';
+
+    /**
+     * 创建收货订单
+     * @var string
+     */
     private $orderUrl = 'https://openapi.chukou1.cn/v1/pickupOrders';
     private $header = [];
     private $tokenManager = null;
 
     public function __construct()
     {
+        $this->init();
+    }
+
+    public function init()
+    {
         $this->tokenManager = new TokenManager();
 
-        $this->header = [
-            'Authorization: Bearer ' . $this->tokenManager->getAccessToken(),
-            'Content-Type:'.'application/json; charset=UTF-8'
-        ];
+        try {
+            $this->header = [
+                'Authorization: Bearer ' . $this->tokenManager->getAccessToken(),
+                'Content-Type:'.'application/json; charset=UTF-8'
+            ];
+        } catch (\Exception $e) {
+            echo $e->getMessage();exit;
+        }
     }
 
     /**
