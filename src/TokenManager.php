@@ -132,7 +132,7 @@ class TokenManager
      */
     public function getToken()
     {
-        $this->token = unserialize(file_get_contents($this->tokenlog));
+        return unserialize(file_get_contents($this->tokenlog));
     }
 
     /**
@@ -142,7 +142,7 @@ class TokenManager
      */
     public function getAccessToken()
     {
-        $this->getToken();
+        $this->token = $this->getToken();
 
         if (!$this->checkToken()) {
             $res = $this->refreshToken();
